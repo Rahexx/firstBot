@@ -1,5 +1,6 @@
 const restify = require('restify');
 const botbuilder = require('botbuilder');
+const { EchoBot } = require('./bots/echoBot');
 
 // Create bot adapter, which defines how the bot sends and receives messages.
 const adapter = new botbuilder.BotFrameworkAdapter({
@@ -7,7 +8,6 @@ const adapter = new botbuilder.BotFrameworkAdapter({
   appPassword: process.env.MicrosoftAppPassword,
 });
 
-// Create HTTP server.
 let server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, function () {
   console.log(`\n${server.name} listening to ${server.url}`);
@@ -16,17 +16,28 @@ server.listen(process.env.port || process.env.PORT || 3978, function () {
   );
 });
 
-// Listen for incoming requests at /api/messages.
+const onTurnErrorHandler = async (context, error) => {
+  console.error(`Unhandled error: ${error}`);
+
+  await context.sendTraceActivity('OnTurnError Trace', error);
+  await context.sendActivity('The bot encountered an error or bug.');
+  await context.sendActivity(
+    'To continue to run this bot, please fix the bot source code',
+  );
+};
+
+adapter.onTurnError = onTurnErrorHandler;
+
+const echoBot = new EchoBot();
+
 server.post('/api/messages', (req, res, next) => {
-  // Use the adapter to process the incoming web request into a TurnContext object.
   adapter.processActivity(req, res, async (turnContext) => {
-    // Do something with this incoming activity!
     if (turnContext.activity.type === 'message') {
       // Get the user's text
       const utterance = turnContext.activity.text;
-
-      // send a reply
-      await turnContext.sendActivity(`I heard you say ${utterance}`);
+      if (turnContext.activity.text !== '') {
+        await adapter.process(req, res, (context) => echoBot.run(context));
+      }
     }
   });
 });
