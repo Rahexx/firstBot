@@ -28,7 +28,9 @@ const onTurnErrorHandler = async (context, error) => {
 
 adapter.onTurnError = onTurnErrorHandler;
 
-const echoBot = new EchoBot();
+const memoryStorage = new botbuilder.MemoryStorage();
+const userState = new botbuilder.UserState(memoryStorage);
+const echoBot = new EchoBot(userState);
 
 server.post('/api/messages', (req, res, next) => {
   adapter.processActivity(req, res, async (turnContext) => {
