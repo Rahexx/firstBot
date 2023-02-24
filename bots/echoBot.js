@@ -1,17 +1,21 @@
-const { ActivityHandler, MessageFactory } = require('botbuilder');
-
-// Welcomed User property name
-const WELCOMED_USER = 'welcomedUserProperty';
+const { ActivityHandler, MessageFactory, CardFactory } = require('botbuilder');
+const exampleCard = require('../resources/exampleCard.json');
 
 class EchoBot extends ActivityHandler {
   starWarsGreetings = 'hello there';
   lorGreetings = 'ring';
   needToPass = 'pass';
   gimliFriend = 'gimli to legolas';
+  exampleOfCard = 'example card';
 
   constructor(userState) {
     super();
-    this.welcomedUserProperty = userState.createProperty(WELCOMED_USER);
+    if (!userState)
+      throw new Error('[DialogBot]: Missing parameter. userState is required');
+
+    this.welcomedUserProperty = userState.createProperty(
+      'welcomedUserProperty',
+    );
     this.userState = userState;
     this.onMessage(async (context, next) => {
       const didBotWelcomedUser = await this.welcomedUserProperty.get(
@@ -21,7 +25,7 @@ class EchoBot extends ActivityHandler {
 
       if (didBotWelcomedUser === false) {
         const userName = context.activity.from.name;
-        await context.sendActivity(`Hello there ${userName}`);
+        await context.sendActivity(`Welcome on chat user: ${userName}`);
 
         // Set the flag indicating the bot handled the user's first message.
         await this.welcomedUserProperty.set(context, true);
@@ -50,6 +54,12 @@ class EchoBot extends ActivityHandler {
               'Legolas: What about side by side with a friend?',
             );
             await this.sendReply(context, 'Gimli: Aye, I could do that.');
+            break;
+          case this.exampleOfCard:
+            await context.sendActivity({
+              text: 'Here is an Example of Card',
+              attachments: [CardFactory.adaptiveCard(exampleCard)],
+            });
             break;
           default:
             const responseText = `You said: ${context.activity.text}`;
