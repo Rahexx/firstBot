@@ -1,5 +1,6 @@
 const { ActivityHandler, MessageFactory, CardFactory } = require('botbuilder');
 const exampleCard = require('../resources/exampleCard.json');
+const favouriteWebsiteCard = require('../resources/favouriteWebsitesCard.json');
 
 class EchoBot extends ActivityHandler {
   starWarsGreetings = 'hello there';
@@ -7,6 +8,7 @@ class EchoBot extends ActivityHandler {
   needToPass = 'pass';
   gimliFriend = 'gimli to legolas';
   exampleOfCard = 'example card';
+  favouriteWebsite = 'favourite websites';
 
   constructor(userState) {
     super();
@@ -59,6 +61,12 @@ class EchoBot extends ActivityHandler {
             await context.sendActivity({
               text: 'Here is an Example of Card',
               attachments: [CardFactory.adaptiveCard(exampleCard)],
+            });
+            break;
+          case this.favouriteWebsite:
+            await context.sendActivity({
+              text: 'Here is your favourites websites',
+              attachments: [CardFactory.adaptiveCard(favouriteWebsiteCard)],
             });
             break;
           default:

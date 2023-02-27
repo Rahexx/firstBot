@@ -1,0 +1,51 @@
+{
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "type": "AdaptiveCard",
+  "version": "1.0",
+  "body": [
+    {
+      "type": "ColumnSet",
+      "columns": [
+        {
+          "type": "Column",
+          "width": 1,
+          "items": [
+            {
+              "type": "TextBlock",
+              "text": "Your favourite websites",
+              "weight": "bolder",
+              "size": "large"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "type": "Action.OpenUrl",
+      "title": "OnePiece",
+      "url": "https://onepiece.wbijam.pl/pierwsza_seria.html"
+    },
+    {
+      "type": "Action.OpenUrl",
+      "title": "Netflix",
+      "url": "https://www.netflix.com/browse"
+    },
+    {
+      "type": "Action.OpenUrl",
+      "title": "Poczta",
+      "url": "https://mail.google.com/mail/u/0/?tab=rm&ogbl#inbox"
+    },
+    {
+      "type": "Action.OpenUrl",
+      "title": "Poczta",
+      "url": "https://jbzd.com.pl/"
+    },
+    {
+      "type": "Action.OpenUrl",
+      "title": "Dokumentacja bota",
+      "url": "https://learn.microsoft.com/en-us/azure/bot-service/bot-service-quickstart-create-bot?view=azure-bot-service-4.0&tabs=csharp%2Cvs"
+    }
+  ]
+}
