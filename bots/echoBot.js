@@ -1,6 +1,7 @@
 const { ActivityHandler, MessageFactory, CardFactory } = require('botbuilder');
 const exampleCard = require('../resources/exampleCard.json');
 const favouriteWebsiteCard = require('../resources/favouriteWebsitesCard.json');
+const nodeIdeas = require('../resources/nodeIdeas.json');
 
 class EchoBot extends ActivityHandler {
   starWarsGreetings = 'hello there';
@@ -9,6 +10,7 @@ class EchoBot extends ActivityHandler {
   gimliFriend = 'gimli to legolas';
   exampleOfCard = 'example card';
   favouriteWebsite = 'favourite websites';
+  appIdeas = 'app ideas';
 
   constructor(userState) {
     super();
@@ -31,48 +33,52 @@ class EchoBot extends ActivityHandler {
 
         // Set the flag indicating the bot handled the user's first message.
         await this.welcomedUserProperty.set(context, true);
-      } else {
-        const userMsg = context.activity.text.toLowerCase();
+      }
+      const userMsg = context.activity.text.toLowerCase();
 
-        switch (userMsg) {
-          case this.starWarsGreetings:
-            await this.sendReply(context, 'General Kenobi!');
-            break;
-          case this.lorGreetings:
-            await this.sendReply(context, 'Aragorn: You have my sword');
-            await this.sendReply(context, 'Legolas: And you have my bow');
-            await this.sendReply(context, 'Gimli: And my axe');
-            break;
-          case this.needToPass:
-            await this.sendReply(context, 'You shall not pass!!!');
-            break;
-          case this.gimliFriend:
-            await this.sendReply(
-              context,
-              "Gimli: I never thought I'd die fighting side by side with an elf.",
-            );
-            await this.sendReply(
-              context,
-              'Legolas: What about side by side with a friend?',
-            );
-            await this.sendReply(context, 'Gimli: Aye, I could do that.');
-            break;
-          case this.exampleOfCard:
-            await context.sendActivity({
-              text: 'Here is an Example of Card',
-              attachments: [CardFactory.adaptiveCard(exampleCard)],
-            });
-            break;
-          case this.favouriteWebsite:
-            await context.sendActivity({
-              text: 'Here is your favourites websites',
-              attachments: [CardFactory.adaptiveCard(favouriteWebsiteCard)],
-            });
-            break;
-          default:
-            const responseText = `You said: ${context.activity.text}`;
-            await this.sendReply(context, responseText);
-        }
+      switch (userMsg) {
+        case this.starWarsGreetings:
+          await this.sendReply(context, 'General Kenobi!');
+          break;
+        case this.lorGreetings:
+          await this.sendReply(context, 'Aragorn: You have my sword');
+          await this.sendReply(context, 'Legolas: And you have my bow');
+          await this.sendReply(context, 'Gimli: And my axe');
+          break;
+        case this.needToPass:
+          await this.sendReply(context, 'You shall not pass!!!');
+          break;
+        case this.gimliFriend:
+          await this.sendReply(
+            context,
+            "Gimli: I never thought I'd die fighting side by side with an elf.",
+          );
+          await this.sendReply(
+            context,
+            'Legolas: What about side by side with a friend?',
+          );
+          await this.sendReply(context, 'Gimli: Aye, I could do that.');
+          break;
+        case this.exampleOfCard:
+          await context.sendActivity({
+            text: 'Here is an Example of Card',
+            attachments: [CardFactory.adaptiveCard(exampleCard)],
+          });
+          break;
+        case this.favouriteWebsite:
+          await context.sendActivity({
+            text: 'Here is your favourites websites',
+            attachments: [CardFactory.adaptiveCard(favouriteWebsiteCard)],
+          });
+          break;
+        case this.appIdeas:
+          await context.sendActivity({
+            text: 'Here is your app ideas',
+            attachments: [CardFactory.adaptiveCard(nodeIdeas)],
+          });
+        default:
+          const responseText = `You said: ${context.activity.text}`;
+          await this.sendReply(context, responseText);
       }
 
       await next();
